@@ -1,11 +1,120 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+        <meta charset="utf-8" />
+        <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' gap://ready file:;img-src *; style-src 'self' 'unsafe-inline'; media-src *" />
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width" />
         <title>Blank App</title>
     </head>
     <body>
+        <div class="app">
+            <h1>PhoneGap</h1>
+            <div id="camerastuff" class="">
+                <button id="snapPicture">Take Picture</button>
+                <button id="getPicture">Get Picture</button><br/>
+                <img style="display:none;width:200px;" id="myPhoto" src=""/>
+                <img style="display:none;" id="getPhoto" src=""/>
+            </div>
+        </div>
         <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/naptha/tesseract.js@v1.0.14/dist/tesseract.min.js"></script>
+        <script type="text/javascript">
+            app.initialize();
+        </script>
+
+        <script>
+            window.onload = function()
+            {
+                document.addEventListener("deviceready", init, false);
+            }
+            function init()
+            {
+                document.getElementById("snapPicture").addEventListener("click", captureOCRImage, false);
+                document.getElementById("getPicture").addEventListener("click", getImage, false);
+            }
+            function captureImage()
+            {
+                var srcType = Camera.PictureSourceType.CAMERA;
+                var options = setOptions(srcType);
+                navigator.camera.getPicture(onCaptureSuccess, onCaptureFailure, options);
+            }
+            function onCaptureSuccess(imageData)
+            {
+                var myImage = document.getElementById('myPhoto');
+                myImage.style.display = 'block';
+                //myImage.src = "data:image/jpeg;base64," + imageData;
+                myImage.src = imageData;
+            }
+            function onCaptureFailure(message)
+            {
+                alert('Could not take the photo: ' + message);
+            }
+            function getImage()
+            {
+                var srcType = Camera.PictureSourceType.SAVEDPHOTOALBUM;
+                var options = setOptions(srcType);
+                navigator.camera.getPicture(onGetSuccess, onGetFailure, options);
+            }
+            function onGetSuccess(imageURI)
+            {
+                var getImg = document.getElementById('getPhoto');
+                getImg.style.display = 'block';
+                getImg.src = imageURI;
+            }
+            function onGetFailure(message)
+            {
+                alert('Could not get the photo: ' + message);
+            }
+            function setOptions(srcType) {
+                var options = {
+                    // Some common settings are 20, 50, and 100
+                    quality: 100,
+                    destinationType: Camera.DestinationType.FILE_URI,
+                    // In this app, dynamically set the picture source, Camera or photo gallery
+                    sourceType: srcType,
+                    encodingType: Camera.EncodingType.JPEG,
+                    mediaType: Camera.MediaType.PICTURE,
+                    allowEdit: false,
+                    correctOrientation: true  //Corrects Android orientation quirks
+                }
+                return options;
+            }
+
+            function captureOCRImage()
+            {
+                var srcType = Camera.PictureSourceType.CAMERA;
+                var options = setOptions(srcType);
+                navigator.camera.getPicture(onCaptureOCRSuccess, onCaptureOCRFailure, options);
+            }
+
+            function onCaptureOCRSuccess(imageData) {
+                Tesseract.recognize(imageData)
+                .then(function(result) {
+                    alert(result);
+                    console.log(result);
+                });
+            }
+
+            function onCaptureOCRSuccess2(imageData) {
+                alert("here");
+                textocr.recText(0, 3, imageData, onSuccess, onFail);
+                // for sourceType Use 0,1,2,3 or 4
+                // for returnType Use 0,1,2 or 3 // 3 returns duplicates[see table]
+                function onSuccess(recognizedText) {
+                    //var element = document.getElementById('pp');
+                    //element.innerHTML=recognizedText;
+                    //Use above two lines to show recognizedText in html
+                    console.log(recognizedText)
+                    alert(recognizedText);
+                }
+                function onFail(message) {
+                    alert('Failed because: ' + message);
+                }
+            }
+            function onCaptureOCRFailure(message) {
+                alert('Failed because: ' + message);
+            }
+      </script>
     </body>
 </html>
