@@ -11,15 +11,12 @@
 
     <preference name="DisallowOverscroll" value="true" />
     <preference name="android-minSdkVersion" value="14" />
-
     <preference name='phonegap-version' value='cli-7.0.1' />
+
     <engine name="ios" spec="latest" />
-    
+
     <plugin name="cordova-plugin-battery-status" source="npm" spec="~1.1.1" />
-    <plugin name="cordova-plugin-camera" source="npm" spec="~2.1.1">
-        <variable name="CAMERA_USAGE_DESCRIPTION" value="Use Camera" />
-        <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Select Photo" />
-    </plugin>
+    <plugin name="cordova-plugin-camera" source="npm" spec="~2.1.1" />
     <plugin name="cordova-plugin-media-capture" source="npm" spec="~1.2.0" />
     <plugin name="cordova-plugin-console" source="npm" spec="~1.0.2" />
     <plugin name="cordova-plugin-contacts" source="npm" spec="~2.0.1" />
@@ -40,12 +37,14 @@
     <plugin name="cordova-plugin-whitelist" source="npm" spec="~1.2.1" />
 
     <access origin="*" />
+
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
