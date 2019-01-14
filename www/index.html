@@ -22,14 +22,18 @@
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/naptha/tesseract.js@v1.0.14/dist/tesseract.min.js"></script>
+        <script type="text/javascript" src="tesseract/tesseract.min.js"></script>
         <script type="text/javascript">
             app.initialize();
         </script>
 
         <script>
-            var Tesseract = require('tesseract.js');
-            
+            window.Tesseract = Tesseract.create({
+                workerPath: 'tesseract/worker.js',
+                langPath: 'tesseract/lang/',
+                corePath: 'tesseract/core/index.js',
+            });
+
             window.onload = function()
             {
                 document.addEventListener("deviceready", init, false);
